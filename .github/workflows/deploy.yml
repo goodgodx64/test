@@ -1,4 +1,4 @@
-name: Deployment
+name: Deployment Workflow
 on:
   push:
     branches:
@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     name: Deploy
-    runs-on: debian-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -18,14 +18,8 @@ jobs:
           echo "${{ secrets.SSH_DEPLOY_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
-      - name: Debug1 SSH Key
-        run: |
-          file ~/.ssh/id_rsa
-          cat ~/.ssh/id_rsa | base64
-      - name: Debug2 SSH Key
-        run: echo "${{ secrets.SSH_DEPLOY_KEY }}" | base64
       - name: Deploy to server
         run: |
           echo "Starting deployment..."
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no root@147.45.43.248 "cd /home/test && git pull origin main"
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no username@host "cd /home/designcise && git pull origin main && <your-other-commands>"
           echo "Deployment completed."
