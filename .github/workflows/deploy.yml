@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     name: Deploy
-    runs-on:  debian-bookworm
+    runs-on:  debian@bookworm
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
