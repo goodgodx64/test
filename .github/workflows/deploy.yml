@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     name: Deploy
-    runs-on: debian-bookworm
+    runs-on:  Debian GNU/Linux 12 (bookworm) x86_64
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
