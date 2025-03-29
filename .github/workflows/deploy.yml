@@ -3,23 +3,19 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Set up SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_DEPLOY_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
-      - name: Deploy to server
-        run: |
-          echo "Starting deployment..."
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no root@147.45.43.248 "cd /root/test/ && git pull origin main"
-          echo "Deployment completed."
+    - name: Deploy using ssh # Название шага: Деплой с использованием SSH
+      uses: appleboy/ssh-action@master # Использование готового действия для SSH-подключения
+      with:
+        host: 147.45.43.248 # Хост (сервер) для подключения, берется из секретов Github
+        username: root # Имя пользователя для SSH, берется из секретов Github
+        key: ${{ secrets.PRIVATE_KEY }} # Приватный ключ для SSH, берется из секретов Github
+        port: 22
+        script: |
+         cd /root/test/
+         git pull origin main
